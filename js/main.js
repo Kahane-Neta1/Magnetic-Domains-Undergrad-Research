@@ -187,12 +187,20 @@ function buildSlide3Layout() {
         <ul>
           <li>Causes neighboring spins to align in the same direction.</li>
         </ul>
+        <div class="slide-3-figures">
+          ${buildImageCard('assets/figures/slide-3-fig1.png')}
+          ${buildImageCard('assets/figures/slide-3-fig4.png')}
+        </div>
       </div>
       <div class="slide-3-card">
         <h3>Magnetostatic energy</h3>
         <ul>
           <li>Encourages splitting of domains to reduce internal local magnetic field to minimum needed.</li>
         </ul>
+        <div class="slide-3-figures">
+          ${buildImageCard('assets/figures/slide-3-fig2.png')}
+          ${buildImageCard('assets/figures/slide-3-fig3.png')}
+        </div>
       </div>
       <div class="slide-3-summary">
         <p>In general: Magnetic dipoles under external field should align with its direction, thus reducing the overall field.</p>
@@ -217,10 +225,13 @@ function buildSlide8Layout(slide) {
 }
 
 function buildSlide9Content(slide) {
-  const videoSrc = slide.images[0] || 'assets/videos/slide-9-fig1.mp4';
+  const [video1, video2] = slide.images;
   return `
     <div class="slide-9-layout">
-      <video class="slide-9-video" src="${videoSrc}" controls autoplay muted loop playsinline></video>
+      <div class="slide-9-media-column">
+        <video class="slide-9-video" src="${video1}" controls autoplay muted loop playsinline></video>
+        <video class="slide-9-video" src="${video2}" controls autoplay muted loop playsinline></video>
+      </div>
       <div class="slide-9-description-box">
         <p>${slide.notes}</p>
       </div>
@@ -265,6 +276,9 @@ function buildSectionContent(slide, includeHeading = false) {
     case 'slide-10':
       contentMarkup = buildSlide10Layout(slide);
       break;
+    case 'slide-12':
+      contentMarkup = buildFigureGrid(slide.images);
+      break;
     case 'slide-13':
       contentMarkup = buildSlide13Layout(slide);
       break;
@@ -281,6 +295,42 @@ function buildSectionContent(slide, includeHeading = false) {
       ${noteMarkup}
     </div>
   `;
+}
+
+function normalizeRowImageHeights(selector) {
+  const rows = Array.from(document.querySelectorAll(selector));
+  rows.forEach((row) => {
+    const images = Array.from(row.querySelectorAll('img'));
+    if (!images.length) {
+      return;
+    }
+
+    const pending = images.filter((image) => !image.complete || image.naturalHeight === 0);
+    if (pending.length) {
+      pending.forEach((image) => image.addEventListener('load', () => normalizeRowImageHeights(selector), { once: true }));
+      return;
+    }
+
+    const minHeight = Math.min(...images.map((image) => image.naturalHeight));
+    images.forEach((image) => {
+      if (image.naturalHeight > minHeight) {
+        image.style.height = `${minHeight}px`;
+        image.style.width = 'auto';
+      }
+      const card = image.closest('.figure-card');
+      if (card) {
+        card.style.width = 'auto';
+      }
+    });
+  });
+}
+
+function normalizeAllFigureRows() {
+  normalizeRowImageHeights('.slide-3-figures');
+  normalizeRowImageHeights('.slide-8-row');
+  normalizeRowImageHeights('.slide-10-grid');
+  normalizeRowImageHeights('.slide-12 .figure-grid');
+  normalizeRowImageHeights('.slide-13-grid');
 }
 
 function buildSlide6Box() {
@@ -438,6 +488,7 @@ function handleNestedClick(event) {
 function initialize() {
   buildSlide6Box();
   renderAccordion();
+  normalizeAllFigureRows();
 }
 
 initialize();
