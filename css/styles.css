@@ -315,14 +315,12 @@ body {
 }
 
 .slide-8-row {
-  display: grid;
+  display: flex;
+  justify-content: center;
   gap: 16px;
   margin-bottom: 20px;
-  align-items: start;
-}
-
-.slide-8-row-1 {
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  align-items: flex-start;
+  flex-wrap: wrap;
 }
 
 .slide-8-row-1 .figure-card {
@@ -336,7 +334,20 @@ body {
 }
 
 .slide-8-row-2 {
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  width: 100%;
+  justify-content: center;
+  gap: 0;
+}
+
+.slide-8-row-2 .figure-card {
+  flex: 0 0 33.33%;
+  max-width: 33.33%;
+  width: 33.33%;
+}
+
+.slide-8-row-2 .figure-card img {
+  width: 100%;
+  height: auto;
 }
 
 .slide-9-layout {

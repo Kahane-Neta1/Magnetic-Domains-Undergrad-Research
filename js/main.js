@@ -327,7 +327,6 @@ function normalizeRowImageHeights(selector) {
 
 function normalizeAllFigureRows() {
   normalizeRowImageHeights('.slide-3-figures');
-  normalizeRowImageHeights('.slide-8-row');
   normalizeRowImageHeights('.slide-10-grid');
   normalizeRowImageHeights('.slide-12 .figure-grid');
   normalizeRowImageHeights('.slide-13-grid');
