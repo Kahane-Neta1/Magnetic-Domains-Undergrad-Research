@@ -63,6 +63,28 @@ body {
   text-transform: uppercase;
 }
 
+.page-abstract {
+  margin-top: 24px;
+  color: var(--text);
+  max-width: 860px;
+  margin-left: auto;
+  margin-right: auto;
+  text-align: left;
+}
+
+.page-abstract p {
+  margin: 0 0 16px 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.8;
+}
+
+.page-credit {
+  margin-top: 0;
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.95rem;
+}
+
 /* ============================================
    ACCORDION
    ============================================ */
