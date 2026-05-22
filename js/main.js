@@ -7,31 +7,10 @@
    - title: slide heading
    - notes: speaker notes / description
    - images: array of figure paths
-   
-   Note: Slides 5 and 15 are excluded entirely
    ============================================ */
 
-const slides = [
-  {
-    id: 'slide-1',
-    number: 1,
-    title: 'Magnetic Relaxation Characteristics',
-    notes: 'No speaker notes available.',
-    images: []
-  },
-  {
-    id: 'slide-2',
-    number: 2,
-    title: 'Magnetic Domains',
-    notes: 'What are magnetic domains, saturation, and polarity reversal. Motivation, system design, automation, and analysis are all part of the experimental setup.',
-    images: [
-      'assets/figures/slide-2-fig1.png',
-      'assets/figures/slide-2-fig2.png',
-      'assets/figures/slide-2-fig3.png',
-      'assets/figures/slide-2-fig4.jpg'
-    ]
-  },
-  {
+const slides = {
+  'slide-3': {
     id: 'slide-3',
     number: 3,
     title: 'Basic Model',
@@ -43,7 +22,7 @@ const slides = [
       'assets/figures/slide-3-fig4.png'
     ]
   },
-  {
+  'slide-4': {
     id: 'slide-4',
     number: 4,
     title: 'Hysteresis Loop',
@@ -54,7 +33,7 @@ const slides = [
       'assets/figures/slide-4-fig3.png'
     ]
   },
-  {
+  'slide-6': {
     id: 'slide-6',
     number: 6,
     title: 'Disappearing',
@@ -65,7 +44,7 @@ const slides = [
       'assets/figures/slide-6-fig3.gif'
     ]
   },
-  {
+  'slide-7': {
     id: 'slide-7',
     number: 7,
     title: 'Motion Types',
@@ -75,7 +54,7 @@ const slides = [
       'assets/figures/slide-7-fig2.png'
     ]
   },
-  {
+  'slide-8': {
     id: 'slide-8',
     number: 8,
     title: 'Domain Thinning',
@@ -88,7 +67,7 @@ const slides = [
       'assets/figures/slide-8-fig5.png'
     ]
   },
-  {
+  'slide-9': {
     id: 'slide-9',
     number: 9,
     title: 'Domain Disappearance',
@@ -98,7 +77,7 @@ const slides = [
       'assets/figures/slide-9-fig2.png'
     ]
   },
-  {
+  'slide-10': {
     id: 'slide-10',
     number: 10,
     title: 'Domain Curvature',
@@ -111,14 +90,7 @@ const slides = [
       'assets/figures/slide-10-fig5.png'
     ]
   },
-  {
-    id: 'slide-11',
-    number: 11,
-    title: 'Model',
-    notes: 'The model structure and equations that describe domain behavior under changing voltage.',
-    images: []
-  },
-  {
+  'slide-12': {
     id: 'slide-12',
     number: 12,
     title: 'Domain Disappearance',
@@ -129,7 +101,7 @@ const slides = [
       'assets/figures/slide-12-fig3.png'
     ]
   },
-  {
+  'slide-13': {
     id: 'slide-13',
     number: 13,
     title: 'Domain Disappearance',
@@ -141,91 +113,196 @@ const slides = [
       'assets/figures/slide-13-fig4.png'
     ]
   },
-  {
+  'slide-14': {
     id: 'slide-14',
     number: 14,
     title: 'Summary',
     notes: 'Thinning, motion, and disappearance all shift with higher voltage. Width decreases toward a minimum, disappearance occurs in jumps, and the same exponential decay constant appears across voltage jumps. Curvier and larger-area domains vanish first.',
     images: []
   }
+};
+
+const accordionStructure = [
+  { type: 'slide', slideId: 'slide-3' },
+  { type: 'slide', slideId: 'slide-4' },
+  { type: 'slide', slideId: 'slide-7' },
+  {
+    type: 'group',
+    title: 'Thinning',
+    contentId: 'slide-8'
+  },
+  {
+    type: 'group',
+    title: 'Disappearing',
+    contentId: 'slide-9',
+    children: [
+      { type: 'slide', slideId: 'slide-10' },
+      { type: 'slide', slideId: 'slide-12' },
+      { type: 'slide', slideId: 'slide-13' }
+    ]
+  },
+  { type: 'slide', slideId: 'slide-14' }
 ];
 
-/* ============================================
-   ACCORDION INITIALIZATION
-   ============================================ */
-
+const slide6Captions = ['Thinning', 'Moving', 'Vanishing'];
+const slide6Box = document.getElementById('slide6Box');
 const accordion = document.getElementById('accordion');
 let activeIndex = null;
 
-/**
- * Build figure row HTML for a slide
- * @param {Array} images - Array of image paths
- * @returns {string} HTML string or empty if no images
- */
-function buildFiguresRow(images) {
+function getSlide(id) {
+  return slides[id] || null;
+}
+
+function buildFigureGrid(images) {
   if (!images || images.length === 0) {
     return '';
   }
 
-  const figureCards = images
-    .map(
-      (imagePath) =>
-        `<div class="figure-card"><img src="${imagePath}" alt="Slide figure" loading="lazy"></div>`
-    )
+  const count = Math.min(images.length, 6);
+  const gridClass = `count-${count}`;
+  const cards = images
+    .map((imagePath) => `
+      <div class="figure-card">
+        <img src="${imagePath}" alt="Slide figure" loading="lazy">
+      </div>
+    `)
     .join('');
 
-  return `<div class="figures-row">${figureCards}</div>`;
+  return `
+    <div class="figures-row">
+      <div class="figure-grid ${gridClass}">
+        ${cards}
+      </div>
+    </div>
+  `;
 }
 
-/**
- * Create accordion item HTML
- * @param {Object} slide - Slide data
- * @param {number} index - Array index
- * @returns {string} HTML string
- */
-function createAccordionItem(slide, index) {
-  const figuresMarkup = buildFiguresRow(slide.images);
-  const hasFigures = slide.images && slide.images.length > 0;
+function buildSectionContent(slide, includeHeading = false) {
+  if (!slide) {
+    return '';
+  }
+
+  const headingMarkup = includeHeading ? `<h3 class="section-subtitle">${slide.title}</h3>` : '';
+  const figuresMarkup = buildFigureGrid(slide.images);
 
   return `
-    <div class="accordion-item" data-index="${index}">
-      <button class="accordion-header" aria-expanded="false" aria-controls="content-${index}">
-        <h2 class="accordion-title">${slide.title}</h2>
+    <div class="section-panel">
+      ${headingMarkup}
+      ${figuresMarkup}
+      <p class="accordion-description">${slide.notes}</p>
+    </div>
+  `;
+}
+
+function buildSlide6Box() {
+  const slide = getSlide('slide-6');
+  if (!slide) {
+    return;
+  }
+
+  const gifCards = slide.images
+    .map((imagePath, index) => `
+      <div class="slide6-card">
+        <img src="${imagePath}" alt="Slide 6 figure ${index + 1}" loading="lazy">
+        <p class="slide6-caption">${slide6Captions[index] || 'Mode'}</p>
+      </div>
+    `)
+    .join('');
+
+  slide6Box.innerHTML = `
+    <h2>${slide.title}</h2>
+    <div class="slide6-grid">
+      ${gifCards}
+    </div>
+  `;
+}
+
+function createRootItem(item, index) {
+  if (item.type === 'slide') {
+    const slide = getSlide(item.slideId);
+    return `
+      <div class="accordion-item" data-index="${index}">
+        <button class="accordion-header" aria-expanded="false" aria-controls="content-${index}">
+          <h2 class="accordion-title">${slide.title}</h2>
+          <span class="accordion-arrow">▼</span>
+        </button>
+        <div class="accordion-content" id="content-${index}">
+          <div class="accordion-body">
+            ${buildSectionContent(slide)}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  if (item.type === 'group') {
+    const contentSlide = getSlide(item.contentId);
+    const nestedMarkup = item.children ? buildNestedAccordion(item.children, index) : '';
+
+    return `
+      <div class="accordion-item" data-index="${index}">
+        <button class="accordion-header" aria-expanded="false" aria-controls="content-${index}">
+          <h2 class="accordion-title">${item.title}</h2>
+          <span class="accordion-arrow">▼</span>
+        </button>
+        <div class="accordion-content" id="content-${index}">
+          <div class="accordion-body">
+            ${buildSectionContent(contentSlide, true)}
+            ${nestedMarkup}
+          </div>
+        </div>
+      </div>
+    `;
+  }
+
+  return '';
+}
+
+function buildNestedAccordion(children, parentIndex) {
+  return `
+    <div class="nested-accordion" data-parent-index="${parentIndex}">
+      ${children
+        .map((child, childIndex) => buildNestedItem(child, parentIndex, childIndex))
+        .join('')}
+    </div>
+  `;
+}
+
+function buildNestedItem(child, parentIndex, childIndex) {
+  const slide = getSlide(child.slideId);
+  return `
+    <div class="nested-accordion-item" data-parent-index="${parentIndex}" data-nested-index="${childIndex}">
+      <button class="nested-accordion-header" aria-expanded="false" aria-controls="nested-content-${parentIndex}-${childIndex}">
+        <h3 class="nested-title">${slide.title}</h3>
         <span class="accordion-arrow">▼</span>
       </button>
-      <div class="accordion-content" id="content-${index}">
+      <div class="nested-accordion-content" id="nested-content-${parentIndex}-${childIndex}">
         <div class="accordion-body">
-          ${figuresMarkup}
-          <p class="accordion-description">${slide.notes}</p>
+          ${buildSectionContent(slide, true)}
         </div>
       </div>
     </div>
   `;
 }
 
-/**
- * Render all accordion items
- */
 function renderAccordion() {
-  const markup = slides.map((slide, index) => createAccordionItem(slide, index)).join('');
+  const markup = accordionStructure.map((item, index) => createRootItem(item, index)).join('');
   accordion.innerHTML = markup;
 
-  // Attach event listeners to all headers
   document.querySelectorAll('.accordion-header').forEach((header) => {
     header.addEventListener('click', handleAccordionClick);
   });
+
+  document.querySelectorAll('.nested-accordion-header').forEach((header) => {
+    header.addEventListener('click', handleNestedClick);
+  });
 }
 
-/**
- * Handle accordion header clicks
- * @param {Event} event
- */
 function handleAccordionClick(event) {
   const header = event.currentTarget;
   const item = header.closest('.accordion-item');
   const index = Number(item.dataset.index);
 
-  // Close previously active item
   if (activeIndex !== null && activeIndex !== index) {
     const previousItem = document.querySelector(`.accordion-item[data-index="${activeIndex}"]`);
     if (previousItem) {
@@ -235,7 +312,6 @@ function handleAccordionClick(event) {
     }
   }
 
-  // Toggle current item
   const isCurrentlyActive = item.classList.contains('active');
   if (isCurrentlyActive) {
     item.classList.remove('active');
@@ -248,8 +324,31 @@ function handleAccordionClick(event) {
   }
 }
 
-/* ============================================
-   INITIALIZE
-   ============================================ */
+function handleNestedClick(event) {
+  const header = event.currentTarget;
+  const item = header.closest('.nested-accordion-item');
+  const container = header.closest('.nested-accordion');
+  const activeItem = container.querySelector('.nested-accordion-item.active');
 
-renderAccordion();
+  if (activeItem && activeItem !== item) {
+    activeItem.classList.remove('active');
+    const activeHeader = activeItem.querySelector('.nested-accordion-header');
+    activeHeader.setAttribute('aria-expanded', 'false');
+  }
+
+  const isCurrentlyActive = item.classList.contains('active');
+  if (isCurrentlyActive) {
+    item.classList.remove('active');
+    header.setAttribute('aria-expanded', 'false');
+  } else {
+    item.classList.add('active');
+    header.setAttribute('aria-expanded', 'true');
+  }
+}
+
+function initialize() {
+  buildSlide6Box();
+  renderAccordion();
+}
+
+initialize();

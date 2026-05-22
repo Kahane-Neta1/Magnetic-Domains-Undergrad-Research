@@ -151,39 +151,88 @@ body {
 }
 
 /* ============================================
-   FIGURES ROW
+   SLIDE 6 BOX
+   ============================================ */
+
+.slide6-box {
+  background: linear-gradient(180deg, rgba(18, 30, 60, 0.94), rgba(8, 14, 28, 0.95));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 20px;
+  box-shadow: var(--shadow);
+  padding: 28px 32px;
+  margin-bottom: 32px;
+}
+
+.slide6-box h2 {
+  margin: 0 0 22px 0;
+  font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+  letter-spacing: -0.03em;
+}
+
+.slide6-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 18px;
+}
+
+.slide6-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.slide6-card img {
+  width: 100%;
+  aspect-ratio: 16 / 12;
+  object-fit: cover;
+  border-radius: 16px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: rgba(8, 14, 28, 0.5);
+}
+
+.slide6-caption {
+  margin: 0;
+  text-align: center;
+  color: var(--muted);
+  font-size: 0.95rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+/* ============================================
+   FIGURES GRID
    ============================================ */
 
 .figures-row {
-  display: flex;
-  gap: 16px;
-  overflow-x: auto;
-  padding-bottom: 12px;
   margin-bottom: 24px;
-  scroll-behavior: smooth;
 }
 
-.figures-row::-webkit-scrollbar {
-  height: 8px;
+.figure-grid {
+  display: grid;
+  gap: 16px;
+  width: 100%;
 }
 
-.figures-row::-webkit-scrollbar-track {
-  background: rgba(255, 255, 255, 0.04);
-  border-radius: 4px;
+.figure-grid.count-1 {
+  grid-template-columns: 1fr;
 }
 
-.figures-row::-webkit-scrollbar-thumb {
-  background: rgba(245, 158, 11, 0.3);
-  border-radius: 4px;
+.figure-grid.count-2,
+.figure-grid.count-3 {
+  grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
 }
 
-.figures-row::-webkit-scrollbar-thumb:hover {
-  background: rgba(245, 158, 11, 0.5);
+.figure-grid.count-4 {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.figure-grid.count-5,
+.figure-grid.count-6 {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .figure-card {
-  flex: 0 0 auto;
-  max-width: 100%;
+  width: 100%;
   aspect-ratio: 16 / 12;
   background: rgba(8, 14, 28, 0.5);
   border-radius: 16px;
@@ -202,6 +251,67 @@ body {
   height: 100%;
   object-fit: cover;
   display: block;
+}
+
+.section-panel {
+  display: grid;
+  gap: 24px;
+}
+
+.section-subtitle {
+  margin: 0;
+  font-size: 1.2rem;
+  color: var(--text);
+}
+
+.nested-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  margin-top: 24px;
+}
+
+.nested-accordion-item {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 18px;
+  overflow: hidden;
+}
+
+.nested-accordion-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px;
+  cursor: pointer;
+  background: rgba(255, 255, 255, 0.03);
+  border: none;
+}
+
+.nested-title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.nested-accordion-content {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.35s ease, padding 0.35s ease;
+}
+
+.nested-accordion-item.active .nested-accordion-content {
+  max-height: 2000px;
+}
+
+.nested-accordion-item.active .nested-accordion-header {
+  background: rgba(245, 158, 11, 0.08);
+}
+
+.nested-accordion-item .accordion-body {
+  padding: 0 24px 24px 24px;
 }
 
 /* ============================================
