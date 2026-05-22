@@ -26,7 +26,7 @@ const slides = {
     id: 'slide-4',
     number: 4,
     title: 'Hysteresis Loop',
-    notes: 'The hysteresis loop encodes the material`s magnetic memory. At each voltage step, the applied field acts to overcome the pinning forces acting on most domain walls, so only a subset of walls move and the system equilibrates after each step. The magnetization state reached on the way up differs from that reached on the way down, creating a loop whose width reflects the material`s magnetic memory. The intriuging effect noted here is that larger field strength changes make for less magnetic memory in the sample.',
+    notes: 'Hysteresis behaviour across different voltage jumps. Domain boundaries are weakly driven, so many remain pinned and only some move. The result is partial equilibrium and a memory effect over time.',
     images: [
       'assets/figures/slide-4-fig1.png',
       'assets/figures/slide-4-fig2.png',
@@ -36,8 +36,8 @@ const slides = {
   'slide-6': {
     id: 'slide-6',
     number: 6,
-    title: 'Magnetic Relaxation Characteristics',
-    notes: 'Three qualitatively distinct domain behaviors are observed as the field is stepped. Thinning: a domain narrows while its wall length stays roughly constant. Moving: a domain translates laterally with little change in shape or width, measured as pixel-area displacement. Vanishing: a domain collapses entirely once it crosses a critical minimum width.',
+    title: 'Disappearing',
+    notes: 'Three change modes are shown as motion sequences, highlighting their visual differences and physical significance.',
     images: [
       'assets/figures/slide-6-fig1.gif',
       'assets/figures/slide-6-fig2.gif',
@@ -48,7 +48,7 @@ const slides = {
     id: 'slide-7',
     number: 7,
     title: 'Motion Types',
-    notes: 'The three motion types appear throuout all voltage jumps, but their pixel-area contributions shift systematically. Movement dominates at small jumps; thinning grows at intermediate jumps; disappearance becomes the leading channel beyond a threshold. Each mode has a characteristic onset and decay point, reflecting the hierarchy of energy barriers that the applied field must overcome.',
+    notes: 'Motion types and the key decay points of each mode, highlighting when each type of domain movement begins to fade.',
     images: [
       'assets/figures/slide-7-fig1.png',
       'assets/figures/slide-7-fig2.png'
@@ -58,7 +58,7 @@ const slides = {
     id: 'slide-8',
     number: 8,
     title: 'Domain Thinning',
-    notes: 'As the field increases, the magnetostatic penalty for wide inverted domains grows, so domains narrow. The width histogram shows the distribution shifting toward smaller values with each voltage step. This continues until a minimum critical width is reached — below it, maintaining the two bounding domain walls costs more exchange energy than is recovered by the inverted region, and domains vanish instead of thinning further.',
+    notes: 'Domain width falls as voltage increases. The left histogram is vertical; the right plot shows average width shrinking toward a minimum, at which domains begin to disappear.',
     images: [
       'assets/figures/slide-8-fig1.png',
       'assets/figures/slide-8-fig2.png',
@@ -70,8 +70,8 @@ const slides = {
   'slide-9': {
     id: 'slide-9',
     number: 9,
-    title: 'Domain Movement and Disappearance',
-    notes: 'Using high-speed imaging, we see domain collapse is not abrupt as thought before. Once a domain narrows past its critical width, the energy balance tips and the domain disappears in what seems like a single jump — present in one frame, gone in the next, but is actually a dual change of domain polarity in two places at once.',
+    title: 'Domain Disappearance',
+    notes: 'Examples of domain jumps and the mechanism by which domains vanish during voltage-driven changes.',
     images: [
       'assets/figures/slide-9-fig1.mp4',
       'assets/figures/slide-9-fig2.mp4'
@@ -81,7 +81,7 @@ const slides = {
     id: 'slide-10',
     number: 10,
     title: 'Domain Curvature',
-    notes: 'A curved domain wall carries excess surface energy relative to a straight wall of the same enclosed area — analogous to surface tension in a fluid interface. The system exerts a net inward pressure on curved segments, driving them to straighten. Highly curved domains cannot thin without becoming more curved, making them geometrically unstable and the first to disappear. The frame sequence (Δt = 6 ms) shows visible straightening immediately preceding collapse.',
+    notes: 'Domain curvature is driven by surface-energy minimization. Curvier domains are less stable and tend to disappear first as the system seeks straighter shapes.',
     images: [
       'assets/figures/slide-10-fig2.png',
       'assets/figures/slide-10-fig3.png',
@@ -92,8 +92,8 @@ const slides = {
   'slide-12': {
     id: 'slide-12',
     number: 12,
-    title: 'Domain Disappearance Characteristics',
-    notes: 'Disappearance events are not continuous — plotting the distance a domain wall travels between successive equilibrium positions reveals discrete peaks at near-regular intervals. Between peaks, the system rests in a partial equilibrium: walls have settled into locally stable configurations and stall until the next redistribution of internal stress triggers the following jump. The interval between peaks depends on voltage, indicating a characteristic internal feedback timescale governing how quickly stress redistributes after each event.',
+    title: 'Domain Disappearance',
+    notes: 'Replication distance and peak timing show an effective relaxation scale. A second plot links time between peaks to voltage, indicating a characteristic feedback timescale.',
     images: [
       'assets/figures/slide-12-fig1.png',
       'assets/figures/slide-12-fig2.png',
@@ -103,8 +103,8 @@ const slides = {
   'slide-13': {
     id: 'slide-13',
     number: 13,
-    title: 'Domain Disappearance Decay',
-    notes: 'The pixel count of disappearance events per frame decays exponentially after each voltage step. The decay constant λ (s⁻¹) is of the same order for all tested voltage intervals — meaning the per-domain probability of vanishing per unit time, while change is active, is intrinsic to the material and independent of stimulus magnitude.',
+    title: 'Domain Disappearance',
+    notes: 'Polarity reversals per frame over time. The decay rate is similar across voltage jumps, meaning disappearance probability per active change is consistent even as hysteresis width changes.',
     images: [
       'assets/figures/slide-13-fig1.png',
       'assets/figures/slide-13-fig2.png',
@@ -115,7 +115,7 @@ const slides = {
     id: 'slide-14',
     number: 14,
     title: 'Summary',
-    notes: 'Thinning, movement, and disappearance all shift in proportion as the field step grows. Domain width decreases monotonically toward a minimum; disappearance occurs in discrete jumps punctuated by partial equilibria; the exponential decay constant of disappearance rate is consistent across voltage jumps. Geometrically, the most curved and largest-area domains are the first to go — the system preferentially eliminates high-surface-energy configurations.',
+    notes: 'Thinning, motion, and disappearance all shift with higher voltage. Width decreases toward a minimum, disappearance occurs in jumps, and the same exponential decay constant appears across voltage jumps. Curvier and larger-area domains vanish first.',
     images: []
   }
 };
@@ -131,7 +131,7 @@ const accordionStructure = [
   },
   {
     type: 'group',
-    title: 'Movement & Vanishing',
+    title: 'Disappearing',
     contentId: 'slide-9',
     children: [
       { type: 'slide', slideId: 'slide-10' },
@@ -185,7 +185,7 @@ function buildSlide3Layout() {
       <div class="slide-3-card">
         <h3>Exchange interaction & energy</h3>
         <ul>
-          <li>Neighboring spins lower their energy by aligning parallel. This favors one large, uniformly magnetized domain.</li>
+          <li>Causes neighboring spins to align in the same direction.</li>
         </ul>
         <div class="slide-3-figures">
           ${buildImageCard('assets/figures/slide-3-fig1.png')}
@@ -195,7 +195,7 @@ function buildSlide3Layout() {
       <div class="slide-3-card">
         <h3>Magnetostatic energy</h3>
         <ul>
-          <li>A uniformly magnetized sample generates a large stray field outside the material, which costs energy. The system reduces this by splitting into antiparallel domains, partially canceling the external flux.</li>
+          <li>Encourages splitting of domains to reduce internal local magnetic field to minimum needed.</li>
         </ul>
         <div class="slide-3-figures">
           ${buildImageCard('assets/figures/slide-3-fig2.png')}
@@ -203,7 +203,7 @@ function buildSlide3Layout() {
         </div>
       </div>
       <div class="slide-3-summary">
-        <p>In general: the equilibrium domain pattern is the configuration that minimizes the sum of both energies under the applied field.</p>
+        <p>In general: Magnetic dipoles under external field should align with its direction, thus reducing the overall field.</p>
       </div>
     </div>
   `;
