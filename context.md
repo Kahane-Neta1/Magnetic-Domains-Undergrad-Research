@@ -1,126 +1,78 @@
 # Project Context
 
-## What we built
+## Current Implementation (Latest Redesign)
 
-- A presentation website for `Magnetic Domains.pptx`.
-- Initial implementation was a single-page HTML site with embedded CSS/JS.
-- Later refactored to a multi-file architecture with `sections/*.html` fragments for each slide.
-- The site now uses a fixed left sidebar for navigation and a right-side scrollable main content area.
-- Each slide became a section:
-  - Slide title → section heading
-  - Speaker notes → section descriptive text
-- Hebrew speaker notes were translated into English while preserving the original meaning.
+A clean, accordion-style presentation website for Magnetic Domains research.
 
-## Design decisions
+### Architecture
+- **Single-file HTML**: `index.html` (clean, minimal markup)
+- **External CSS**: `css/styles.css` (commented, organized sections)
+- **External JavaScript**: `js/main.js` (accordion logic, commented slide data)
 
-- Color palette:
-  - Primary deep slate/navy background gradients
-  - Warm accent in gold/orange `#f59e0b`
-  - Muted text in a soft slate tone
-- Typography:
-  - Google Font `Inter`
-  - Clean sans-serif styling for a polished academic look
-- Layout:
-  - Fixed left sidebar on desktop
-  - Main content area on the right with generous padding and spacing
-  - Each section given its own card-style container with rounded corners, shadow, and minimum height
-- Sidebar behavior:
-  - Sidebar items show only the icon by default
-  - Hover expands the item to reveal the title with a smooth CSS transition
-  - Clicking a sidebar item scrolls smoothly to the section
-  - Active section is highlighted using `IntersectionObserver`
-- Responsive behavior:
-  - On smaller screens, sidebar becomes a top navigation bar
-  - Sidebar items become fully visible labels on mobile for easier tapping
+### Features
+- Accordion/collapsible sections (only one open at a time)
+- Smooth expand/collapse animations
+- Dark academic aesthetic (navy background, warm gold accents, Inter font)
+- Horizontal scrollable figure rows for each section
+- Speaker notes displayed below figures
+- Responsive design (works on tablet and mobile)
 
-## Full prompt used to generate the site
+### Slide Content
+- **13 sections** (slides 5 and 15 excluded per user request)
+- Each section includes:
+  - Section title (slide heading)
+  - Horizontal row of figures (side-by-side, scrollable if many)
+  - Speaker notes (description text)
+- Slides without figures: 1, 11, 14 (display text only, no figure row)
 
-Initial prompt:
+### Figures
+- All 35 extracted figures stored in `assets/figures/`
+- Organized by slide: `slide-[N]-fig[M].[ext]`
+- Supported formats: PNG, JPG, GIF
+- Figures from slides 5 and 15 deleted as requested
 
-"Build a single-page HTML website (one file: index.html with embedded CSS and JS) that showcases it.
+## File Structure
+```
+.
+├── index.html           # Main page
+├── css/
+│   └── styles.css       # All styling (commented sections)
+├── js/
+│   └── main.js          # Accordion logic + slide data
+├── assets/
+│   └── figures/         # 35 extracted images
+├── presentation/        # Original PPTX file
+├── context.md           # This file
+└── .gitignore, .git, .venv/  # Dev files
+```
 
-CONTENT RULES:
-- Each slide becomes a section on the page
-- Each slide's title becomes the section heading
-- Each slide's speaker notes become the descriptive text for that section
-- Read the presentation file to extract this content before writing any code
+## Design System
+- **Colors**:
+  - Background: `#050914` (deep navy)
+  - Surface: `rgba(10, 17, 34, 0.95)`
+  - Text: `#eef3ff` (light blue)
+  - Muted: `#9bb2d3` (soft slate)
+  - Accent: `#f59e0b` (warm gold)
+- **Typography**: Inter (Google Fonts), 400/500/600/700 weights
+- **Spacing**: Generous padding, 16-20px gaps, 40px container padding
+- **Shadows**: Subtle elevation effects on hover/active states
 
-LAYOUT:
-- Fixed sidebar on the left for navigation
-- Main content area on the right that scrolls
-- Each section should be visually distinct and full-width
+## Technical Details
+- Pure HTML/CSS/JavaScript (no frameworks)
+- No external dependencies (only Google Fonts)
+- All figure paths use relative `assets/figures/` directory
+- Accessible markup with ARIA attributes
+- Mobile-first responsive breakpoints at 768px and 480px
 
-SIDEBAR DESIGN:
-- Each section has a small icon (use a relevant SVG or emoji icon per section topic)
-- By default only the icon is visible (sidebar is collapsed/narrow)
-- On hover, the sidebar item smoothly slides open to reveal the full section title (CSS transition, no JS needed)
-- Clicking a sidebar item smoothly scrolls to that section
-- Active section should be highlighted in the sidebar (use IntersectionObserver in JS)
+## Removed Files
+- `sections/` folder (old fragment-based approach)
+- `assets/slide_data.json` (data now in JS)
+- Old slideshow-style navigation and controls
+- Slides 5 and 15 figures completely removed
 
-DESIGN:
-- Modern, professional academic aesthetic
-- Clean sans-serif typography (use Google Fonts — Inter or DM Sans)
-- Color palette: deep navy or slate as primary, with a warm accent color
-- Subtle section dividers, generous whitespace
-- Responsive: sidebar collapses to a top nav on mobile
+## To Edit Content
+1. **Add/remove slides**: Modify the `slides` array in `js/main.js`
+2. **Change styling**: Edit `css/styles.css` (sections are well-commented)
+3. **Update text**: Edit `notes` or `title` fields in slide data
+4. **Add images**: Place in `assets/figures/` and reference in `images` array
 
-TECHNICAL:
-- Pure HTML/CSS/JS, no frameworks or libraries except Google Fonts
-- Smooth scroll behavior
-- All in one index.html file"
-
-Follow-up prompt:
-
-"Fix the layout: sections are overlapping and text is cramped. Add proper padding, margin, min-height to each section, and ensure the sidebar doesn't cover the main content.
-also change the arcitecture to be multi-file html for easier editing for each section.
-also translate the hebrew text to english, and edit all the text to keep the original meaning but make it more coherent and presentable. do not add new context or conclusions."
-
-## File structure
-
-- `index.html`
-- `context.md`
-- `sections/`
-  - `slide-1.html`
-  - `slide-2.html`
-  - `slide-3.html`
-  - `slide-4.html`
-  - `slide-5.html`
-  - `slide-6.html`
-  - `slide-7.html`
-  - `slide-8.html`
-  - `slide-9.html`
-  - `slide-10.html`
-  - `slide-11.html`
-  - `slide-12.html`
-  - `slide-13.html`
-  - `slide-14.html`
-  - `slide-15.html`
-- `presentation/` (source PPTX file)
-
-## Bugs or issues fixed
-
-- Fixed layout overlap by increasing sidebar width, adding main content left margin, and separating content from the fixed sidebar.
-- Resolved cramped text by giving sections more padding, `min-height`, and larger spacing between sections.
-- Removed the initial single-page static section markup and replaced it with client-side fragment loading so each section can be edited separately.
-- Fixed the issue of raw Hebrew notes by translating them into English and rewriting them for clarity without changing meaning.
-
-## Tools and extensions used
-
-- Python environment configured in the workspace
-- Installed `python-pptx` to extract slide titles and notes from `presentation/Magnetic Domains.pptx`
-- No frontend frameworks or libraries were used in the final site besides Google Fonts
-
-## What still needs to be done or improved
-
-- Confirm the site works properly when served from a local server, since `fetch()` loading of `sections/*.html` may fail under `file://`.
-- Add explicit fallback content or inline section HTML if local file loading becomes a problem.
-- Optionally convert the `sections/*.html` fragments into a templating or build system if the project grows further.
-- You may also improve section descriptions further if additional slide detail from the PPTX is needed.
-
-## Important details for future continuation
-
-- The project is now a hybrid multi-file static site: `index.html` handles layout, navigation, and fragment loading.
-- Editable slide content lives in `sections/slide-*.html`.
-- Slide data came from `Magnetic Domains.pptx` and is reflected in each fragment.
-- Use the `nav-list` / `sectionDefs` arrays in `index.html` to add or rename sections.
-- If you return later, you can continue by editing individual bullet sections or enhancing the shared CSS/JS in `index.html`.
