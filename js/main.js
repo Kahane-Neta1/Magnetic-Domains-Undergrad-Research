@@ -73,8 +73,8 @@ const slides = {
     title: 'Domain Disappearance',
     notes: 'Examples of domain jumps and the mechanism by which domains vanish during voltage-driven changes.',
     images: [
-      'assets/figures/slide-9-fig1.jpg',
-      'assets/figures/slide-9-fig2.png'
+      'assets/figures/slide-9-fig1.mp4',
+      'assets/figures/slide-9-fig2.mp4'
     ]
   },
   'slide-10': {
@@ -83,7 +83,6 @@ const slides = {
     title: 'Domain Curvature',
     notes: 'Domain curvature is driven by surface-energy minimization. Curvier domains are less stable and tend to disappear first as the system seeks straighter shapes.',
     images: [
-      'assets/figures/slide-10-fig1.png',
       'assets/figures/slide-10-fig2.png',
       'assets/figures/slide-10-fig3.png',
       'assets/figures/slide-10-fig4.png',
@@ -109,8 +108,7 @@ const slides = {
     images: [
       'assets/figures/slide-13-fig1.png',
       'assets/figures/slide-13-fig2.png',
-      'assets/figures/slide-13-fig3.png',
-      'assets/figures/slide-13-fig4.png'
+      'assets/figures/slide-13-fig3.png'
     ]
   },
   'slide-14': {
@@ -153,6 +151,14 @@ function getSlide(id) {
   return slides[id] || null;
 }
 
+function buildImageCard(imagePath) {
+  return `
+    <div class="figure-card">
+      <img src="${imagePath}" alt="Slide figure" loading="lazy">
+    </div>
+  `;
+}
+
 function buildFigureGrid(images) {
   if (!images || images.length === 0) {
     return '';
@@ -161,11 +167,7 @@ function buildFigureGrid(images) {
   const count = Math.min(images.length, 6);
   const gridClass = `count-${count}`;
   const cards = images
-    .map((imagePath) => `
-      <div class="figure-card">
-        <img src="${imagePath}" alt="Slide figure" loading="lazy">
-      </div>
-    `)
+    .map((imagePath) => buildImageCard(imagePath))
     .join('');
 
   return `
@@ -177,19 +179,106 @@ function buildFigureGrid(images) {
   `;
 }
 
+function buildSlide3Layout() {
+  return `
+    <div class="slide-3-grid">
+      <div class="slide-3-card">
+        <h3>Exchange interaction & energy</h3>
+        <ul>
+          <li>Causes neighboring spins to align in the same direction.</li>
+        </ul>
+      </div>
+      <div class="slide-3-card">
+        <h3>Magnetostatic energy</h3>
+        <ul>
+          <li>Encourages splitting of domains to reduce internal local magnetic field to minimum needed.</li>
+        </ul>
+      </div>
+      <div class="slide-3-summary">
+        <p>In general: Magnetic dipoles under external field should align with its direction, thus reducing the overall field.</p>
+      </div>
+    </div>
+  `;
+}
+
+function buildSlide8Layout(slide) {
+  const [fig1, fig2, fig3, fig4, fig5] = slide.images;
+  return `
+    <div class="slide-8-row slide-8-row-1">
+      ${buildImageCard(fig2)}
+      ${buildImageCard(fig3)}
+    </div>
+    <div class="slide-8-row slide-8-row-2">
+      ${buildImageCard(fig1)}
+      ${buildImageCard(fig4)}
+      ${buildImageCard(fig5)}
+    </div>
+  `;
+}
+
+function buildSlide9Content(slide) {
+  const videoSrc = slide.images[0] || 'assets/videos/slide-9-fig1.mp4';
+  return `
+    <div class="slide-9-layout">
+      <video class="slide-9-video" src="${videoSrc}" controls autoplay muted loop playsinline></video>
+      <div class="slide-9-description-box">
+        <p>${slide.notes}</p>
+      </div>
+    </div>
+  `;
+}
+
+function buildSlide10Layout(slide) {
+  return `
+    <div class="slide-10-grid">
+      ${slide.images.map((imagePath) => buildImageCard(imagePath)).join('')}
+    </div>
+  `;
+}
+
+function buildSlide13Layout(slide) {
+  return `
+    <div class="slide-13-grid">
+      ${slide.images.map((imagePath) => buildImageCard(imagePath)).join('')}
+    </div>
+  `;
+}
+
 function buildSectionContent(slide, includeHeading = false) {
   if (!slide) {
     return '';
   }
 
   const headingMarkup = includeHeading ? `<h3 class="section-subtitle">${slide.title}</h3>` : '';
-  const figuresMarkup = buildFigureGrid(slide.images);
+  let contentMarkup;
+
+  switch (slide.id) {
+    case 'slide-3':
+      contentMarkup = buildSlide3Layout();
+      break;
+    case 'slide-8':
+      contentMarkup = buildSlide8Layout(slide);
+      break;
+    case 'slide-9':
+      contentMarkup = buildSlide9Content(slide);
+      break;
+    case 'slide-10':
+      contentMarkup = buildSlide10Layout(slide);
+      break;
+    case 'slide-13':
+      contentMarkup = buildSlide13Layout(slide);
+      break;
+    default:
+      contentMarkup = buildFigureGrid(slide.images);
+  }
+
+  const noteMarkup = slide.id === 'slide-3' || slide.id === 'slide-9' ? '' : `<p class="accordion-description">${slide.notes}</p>`;
 
   return `
-    <div class="section-panel">
+    <div class="section-panel slide-${slide.id}">
       ${headingMarkup}
-      ${figuresMarkup}
-      <p class="accordion-description">${slide.notes}</p>
+      ${contentMarkup}
+      ${noteMarkup}
     </div>
   `;
 }
